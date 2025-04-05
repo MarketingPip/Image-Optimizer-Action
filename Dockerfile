@@ -3,7 +3,7 @@ FROM debian:stable
 
 # Install system dependencies required for Pillow and other Python dependencies
 RUN apt-get update -y && apt-get install -y \
-    python3 \
+    python-is-python3 \
     python3-pip \
     libjpeg-dev \
     zlib1g-dev \
