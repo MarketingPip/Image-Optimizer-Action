@@ -1,19 +1,19 @@
 # Dockerfile - created by github.com/MarketingPipeline
-FROM debian:stable
+# Use the official Python 3 image as the base image
+FROM python:3
 
-# Install system dependencies required for Pillow and other Python dependencies
+# Install required system dependencies for Pillow, Tesseract, and Ghostscript
 RUN apt-get update -y && apt-get install -y \
-    python-is-python3 \
-    python3-pip \
+    tesseract-ocr \
+    ghostscript \
     libjpeg-dev \
     zlib1g-dev \
     && rm -rf /var/lib/apt/lists/*  # Clean up apt cache to reduce image size
 
-# Ensure pip is up to date (handling any potential missing pip issues)
-RUN python3 -m ensurepip --upgrade
-RUN python3 -m pip install --no-cache-dir --upgrade pip
+# Upgrade pip to the latest version
+RUN python3 -m pip install --upgrade pip
 
-# Install Python dependencies for the project
+# Install Python dependencies for the project (Pillow and optimize-images)
 RUN pip3 install --no-cache-dir pillow optimize-images
 
 # Copy the entry point script into the container
