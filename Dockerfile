@@ -1,16 +1,28 @@
 # Dockerfile - created by github.com/MarketingPipeline
-FROM debian:stable 
+FROM debian:stable
 
-## Install linux / python dependencies 
-RUN apt-get update -y && apt-get install -y python3 python3-pip tesseract-ocr ghostscript
+# Install system dependencies required for Pillow and other Python dependencies
+RUN apt-get update -y && apt-get install -y \
+    python3 \
+    python3-pip \
+    tesseract-ocr \
+    ghostscript \
+    libjpeg-dev \
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/*  # Clean up apt cache to reduce image size
 
-## Install python project dependencies
+# Upgrade pip to the latest version
+RUN python3 -m pip install --upgrade pip
+
+# Install Python dependencies for the project
 RUN pip3 install pillow optimize-images
 
-## Copy the Entry Point
+# Copy the entry point script into the container
 COPY entrypoint /usr/local/bin/
 
-## Make entry point exectuable
-RUN ["chmod", "+x", "/usr/local/bin/entrypoint"]
-## Provide access to entry point
+# Make the entry point executable
+RUN chmod +x /usr/local/bin/entrypoint
+
+# Define the entry point for the container
 ENTRYPOINT ["/usr/local/bin/entrypoint"]
+
